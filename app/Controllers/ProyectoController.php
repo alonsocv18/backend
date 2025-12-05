@@ -33,6 +33,18 @@ class ProyectoController
         }
     }
 
+    public function obtenerPorId($id)
+    {
+        try {
+            $proyecto = $this->proyectoService->obtenerProyectoPorId($id);
+
+            ApiResponse::exito("Proyecto recuperado.", $proyecto->toArray());
+
+        } catch (\Exception $e) {
+            ApiResponse::alerta($e->getMessage());
+        }
+    }
+
     public function crear()
     {
         try {

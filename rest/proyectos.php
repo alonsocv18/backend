@@ -11,6 +11,10 @@ $app->group('/proyectos', function () use ($app) {
         (new ProyectoController())->listar();
     });
 
+    $app->get('/:id', function ($id) {
+        (new ProyectoController())->obtenerPorId($id);
+    });
+
     // Estas rutas ejecutarán la lógica del Service y
     // lanzarán error si el usuario es Rol 3.
     $app->post('/', function () {
