@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Services\TareaService;
 use App\Utils\ApiResponse;
+use App\Validators\TareaValidator;
 use \Slim\Slim;
 
 class TareaController
@@ -49,10 +50,7 @@ class TareaController
             $datos = json_decode($app->request->getBody(), true);
             $usuarioLogueado = $app->usuario; // Objeto Usuario completo
 
-            if (empty($datos)) {
-                ApiResponse::alerta("No se enviaron datos.");
-                return;
-            }
+            TareaValidator::validarCreacion($datos);
 
             // CAMBIO: Pasamos $usuarioLogueado (Objeto) en vez de solo el ID
             $nuevoId = $this->tareaService->crearTarea($datos, $usuarioLogueado);
@@ -74,10 +72,7 @@ class TareaController
             // Necesitamos saber quién está editando para validar permisos
             $usuarioLogueado = $app->usuario;
 
-            if (empty($datos)) {
-                ApiResponse::alerta("No se enviaron datos.");
-                return;
-            }
+            TareaValidator::validarEdicion($datos);
 
             $this->tareaService->editarTarea($id, $datos, $usuarioLogueado);
 

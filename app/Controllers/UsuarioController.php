@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Services\UsuarioService;
 use App\Utils\ApiResponse;
 use App\Utils\Auth;
+use App\Validators\UsuarioValidator;
 use \Slim\Slim;
 
 class UsuarioController
@@ -23,11 +24,8 @@ class UsuarioController
             $app = Slim::getInstance();
             $datos = json_decode($app->request->getBody(), true);
 
-            // Validar datos mínimos
-            if (empty($datos) || empty($datos['usuario_nombre']) || empty($datos['usuario_correo']) || empty($datos['usuario_password'])) {
-                ApiResponse::alerta("Faltan datos obligatorios.");
-                return;
-            }
+            // Validar datos con el Validator
+            UsuarioValidator::validarRegistro($datos);
 
             // Registrar (Por defecto Rol 3)
             $nuevoId = $this->usuarioService->registrarUsuario($datos);
@@ -45,10 +43,7 @@ class UsuarioController
             $app = Slim::getInstance();
             $datos = json_decode($app->request->getBody(), true);
 
-            if (empty($datos['usuario_correo']) || empty($datos['usuario_password'])) {
-                ApiResponse::alerta("Correo y contraseña requeridos.");
-                return;
-            }
+            UsuarioValidator::validarLogin($datos);
 
             // Validar credenciales (incluye lógica de bloqueo)
             $usuario = $this->usuarioService->loginUsuario(
@@ -105,10 +100,7 @@ class UsuarioController
             $datos = json_decode($app->request->getBody(), true);
             $usuarioLogueado = $app->usuario;
 
-            if (empty($datos)) {
-                ApiResponse::alerta("Sin datos.");
-                return;
-            }
+            UsuarioValidator::validarCreacionAdmin($datos);
 
             $id = $this->usuarioService->crearUsuarioAdmin($datos, $usuarioLogueado);
 
@@ -126,10 +118,7 @@ class UsuarioController
             $datos = json_decode($app->request->getBody(), true);
             $usuarioLogueado = $app->usuario;
 
-            if (empty($datos)) {
-                ApiResponse::alerta("Sin datos para editar.");
-                return;
-            }
+            UsuarioValidator::validarEdicionAdmin($datos);
 
             $this->usuarioService->editarUsuarioAdmin($id, $datos, $usuarioLogueado);
 

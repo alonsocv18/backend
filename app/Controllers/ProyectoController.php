@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Services\ProyectoService;
 use App\Utils\ApiResponse;
+use App\Validators\ProyectoValidator;
 use \Slim\Slim;
 
 class ProyectoController
@@ -39,10 +40,7 @@ class ProyectoController
             $datos = json_decode($app->request->getBody(), true);
             $usuario = $app->usuario; // Inyectado por Middleware
 
-            if (empty($datos)) {
-                ApiResponse::alerta("Sin datos.");
-                return;
-            }
+            ProyectoValidator::validarCreacion($datos);
 
             $id = $this->proyectoService->crearProyecto($datos, $usuario);
             ApiResponse::exito("Proyecto creado.", ['id' => $id]);
@@ -59,6 +57,8 @@ class ProyectoController
             $app = Slim::getInstance();
             $datos = json_decode($app->request->getBody(), true);
             $usuario = $app->usuario;
+
+            ProyectoValidator::validarEdicion($datos);
 
             $this->proyectoService->editarProyecto($id, $datos, $usuario);
             ApiResponse::exito("Proyecto actualizado.");
