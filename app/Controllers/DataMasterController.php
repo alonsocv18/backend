@@ -43,4 +43,24 @@ class DataMasterController
             ApiResponse::error("Error: " . $e->getMessage());
         }
     }
+
+    public function getSucursales()
+    {
+        try {
+            $data = $this->repository->listarSucursales();
+            ApiResponse::exito("Sucursales recuperadas.", $data);
+        } catch (\Exception $e) {
+            ApiResponse::error("Error: " . $e->getMessage());
+        }
+    }
+
+    public function getEstadosProyecto()
+    {
+        try {
+            $data = $this->repository->listarEstadosProyecto();
+            ApiResponse::exito("Estados de proyecto recuperados.", $data);
+        } catch (\Exception $e) {
+            ApiResponse::error("Error: " . $e->getMessage());
+        }
+    }
 }

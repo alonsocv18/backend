@@ -21,7 +21,7 @@ class ReporteRepository
         // Ejecuta múltiples conteos en una sola consulta
         $sql = "SELECT 
                     (SELECT COUNT(*) FROM usuarios WHERE usuario_estado = 1) as total_usuarios,
-                    (SELECT COUNT(*) FROM proyectos WHERE proyecto_estado = 1) as total_proyectos,
+                    (SELECT COUNT(*) FROM proyectos WHERE fecha_eliminacion IS NULL) as total_proyectos,
                     (SELECT COUNT(*) FROM tareas WHERE fecha_eliminacion IS NULL) as total_tareas";
 
         $stmt = $this->conn->prepare($sql);
@@ -69,7 +69,7 @@ class ReporteRepository
                     SUM(CASE WHEN t.estado_id = 4 THEN 1 ELSE 0 END) as completadas
                 FROM proyectos p
                 LEFT JOIN tareas t ON p.proyecto_id = t.proyecto_id AND t.fecha_eliminacion IS NULL
-                WHERE p.proyecto_estado = 1
+                WHERE p.fecha_eliminacion IS NULL
                 GROUP BY p.proyecto_id, p.proyecto_nombre";
 
         $stmt = $this->conn->prepare($sql);

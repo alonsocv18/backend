@@ -89,13 +89,19 @@ class TareaService
             }
         }
 
-        // Actualiza solo los campos enviados
-        $tareaActual->tarea_titulo = isset($datos['titulo']) ? $datos['titulo'] : $tareaActual->tarea_titulo;
-        $tareaActual->tarea_descripcion = isset($datos['descripcion']) ? $datos['descripcion'] : $tareaActual->tarea_descripcion;
-        $tareaActual->fecha_limite = isset($datos['fecha_limite']) ? $datos['fecha_limite'] : $tareaActual->fecha_limite;
-        $tareaActual->prioridad_id = isset($datos['prioridad_id']) ? $datos['prioridad_id'] : $tareaActual->prioridad_id;
-        $tareaActual->estado_id = isset($datos['estado_id']) ? $datos['estado_id'] : $tareaActual->estado_id;
-        $tareaActual->usuario_asignado = isset($datos['usuario_asignado']) ? $datos['usuario_asignado'] : $tareaActual->usuario_asignado;
+        // Usuario normal (rol 3) solo puede cambiar el estado
+        if ($usuarioActual->rol_id == 3) {
+            // Solo permitir cambio de estado para usuario normal
+            $tareaActual->estado_id = isset($datos['estado_id']) ? $datos['estado_id'] : $tareaActual->estado_id;
+        } else {
+            // Admin y PM pueden actualizar todos los campos
+            $tareaActual->tarea_titulo = isset($datos['titulo']) ? $datos['titulo'] : $tareaActual->tarea_titulo;
+            $tareaActual->tarea_descripcion = isset($datos['descripcion']) ? $datos['descripcion'] : $tareaActual->tarea_descripcion;
+            $tareaActual->fecha_limite = isset($datos['fecha_limite']) ? $datos['fecha_limite'] : $tareaActual->fecha_limite;
+            $tareaActual->prioridad_id = isset($datos['prioridad_id']) ? $datos['prioridad_id'] : $tareaActual->prioridad_id;
+            $tareaActual->estado_id = isset($datos['estado_id']) ? $datos['estado_id'] : $tareaActual->estado_id;
+            $tareaActual->usuario_asignado = isset($datos['usuario_asignado']) ? $datos['usuario_asignado'] : $tareaActual->usuario_asignado;
+        }
 
         return $this->tareaRepository->actualizar($tareaActual);
     }

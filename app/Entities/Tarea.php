@@ -17,6 +17,7 @@ class Tarea
     public $fecha_creacion;
     public $fecha_eliminacion;
     public $nombre_proyecto;
+    public $nombre_sucursal;
     public $nombre_estado;
     public $nombre_prioridad;
     public $nombre_asignado;
@@ -48,14 +49,15 @@ class Tarea
             'fecha_limite' => $this->fecha_limite,
             'proyecto' => $this->nombre_proyecto,
             'proyecto_id' => $this->proyecto_id,
+            'sucursal' => $this->nombre_sucursal,
             'estado' => $this->nombre_estado,
             'estado_id' => $this->estado_id,
             'prioridad' => $this->nombre_prioridad,
+            'prioridad_id' => $this->prioridad_id,
             'prioridad_color' => $this->color_prioridad,
             'usuario_asignado_nombre' => $this->nombre_asignado,
             'usuario_asignado_id' => $this->usuario_asignado,
             'fecha_creacion' => $this->fecha_creacion,
-            // Si está eliminada, podemos decidir no enviarla o enviarla con flag
             'eliminada' => $this->estaEliminada()
         ];
     }

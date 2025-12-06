@@ -18,4 +18,12 @@ $app->group('/datamaster', function () use ($app) {
         (new DataMasterController())->getEstados();
     });
 
+    $app->get('/sucursales', function () {
+        (new DataMasterController())->getSucursales();
+    });
+
+    $app->get('/estados-proyecto', function () {
+        (new DataMasterController())->getEstadosProyecto();
+    });
+
 });

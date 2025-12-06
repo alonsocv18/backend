@@ -38,4 +38,22 @@ class DataMasterRepository
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function listarSucursales()
+    {
+        $sql = "SELECT sucursal_id as id, sucursal_nombre as nombre, sucursal_direccion as direccion 
+                FROM sucursales ORDER BY sucursal_nombre ASC";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function listarEstadosProyecto()
+    {
+        $sql = "SELECT estado_id as id, estado_nombre as nombre, estado_color as color 
+                FROM proyecto_estados ORDER BY estado_orden ASC";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

@@ -20,12 +20,14 @@ class TareaRepository
         $sql = "SELECT 
                     t.*, 
                     p.proyecto_nombre as nombre_proyecto,
+                    s.sucursal_nombre as nombre_sucursal,
                     e.estado_nombre as nombre_estado,
                     pr.prioridad_nombre as nombre_prioridad,
                     pr.prioridad_color as color_prioridad,
                     u.usuario_nombre as nombre_asignado
                 FROM tareas t
                 INNER JOIN proyectos p ON t.proyecto_id = p.proyecto_id
+                LEFT JOIN sucursales s ON p.sucursal_id = s.sucursal_id
                 INNER JOIN tarea_estados e ON t.estado_id = e.estado_id
                 INNER JOIN tarea_prioridades pr ON t.prioridad_id = pr.prioridad_id
                 LEFT JOIN usuarios u ON t.usuario_asignado = u.usuario_id

@@ -15,6 +15,10 @@ class ProyectoValidator
         if (empty($datos['nombre'])) {
             throw new Exception("El nombre del proyecto es obligatorio.");
         }
+
+        if (empty($datos['sucursal_id'])) {
+            throw new Exception("La sucursal es obligatoria.");
+        }
     }
 
     public static function validarEdicion($datos)
