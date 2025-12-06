@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Repositories\ProyectoRepository;
 use App\Entities\Proyecto;
 use App\Utils\Crypto;
-use App\Validators\ProyectoValidator; // <--- Importamos tu validador
+use App\Validators\ProyectoValidator;
 use Exception;
 
 class ProyectoService
@@ -17,9 +17,14 @@ class ProyectoService
         $this->proyectoRepository = new ProyectoRepository();
     }
 
-    public function listarProyectos()
+    public function listarProyectos($usuarioActual = null)
     {
-        $proyectos = $this->proyectoRepository->listar();
+        // Si es usuario normal (rol 3), solo ver proyectos donde tenga tareas asignadas
+        if ($usuarioActual && $usuarioActual->rol_id == 3) {
+            $proyectos = $this->proyectoRepository->listarPorUsuario($usuarioActual->usuario_id);
+        } else {
+            $proyectos = $this->proyectoRepository->listar();
+        }
 
         foreach ($proyectos as $p) {
             if (!empty($p->nombre_creador)) {

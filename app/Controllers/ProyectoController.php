@@ -19,8 +19,11 @@ class ProyectoController
     public function listar()
     {
         try {
-            // Cualquiera logueado puede listar
-            $proyectos = $this->proyectoService->listarProyectos();
+            $app = Slim::getInstance();
+            $usuario = $app->usuario; // Usuario autenticado (inyectado por middleware)
+
+            // El servicio filtra según el rol del usuario
+            $proyectos = $this->proyectoService->listarProyectos($usuario);
 
             // Convertir a array
             $data = array_map(function ($p) {

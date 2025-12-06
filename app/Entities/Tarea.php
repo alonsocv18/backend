@@ -19,8 +19,8 @@ class Tarea
     public $nombre_proyecto;
     public $nombre_estado;
     public $nombre_prioridad;
-    public $nombre_asignado; 
-    public $color_prioridad; 
+    public $nombre_asignado;
+    public $color_prioridad;
 
     public function __construct($data = [])
     {
@@ -42,20 +42,21 @@ class Tarea
     public function toArray()
     {
         return [
-            'id'            => $this->tarea_id,
-            'titulo'        => $this->tarea_titulo,
-            'descripcion'   => $this->tarea_descripcion,
-            'fecha_limite'  => $this->fecha_limite,
-            'proyecto'      => $this->nombre_proyecto,
-            'proyecto_id'   => $this->proyecto_id,
-            'estado'        => $this->nombre_estado,
-            'estado_id'     => $this->estado_id,
-            'prioridad'     => $this->nombre_prioridad,
+            'id' => $this->tarea_id,
+            'titulo' => $this->tarea_titulo,
+            'descripcion' => $this->tarea_descripcion,
+            'fecha_limite' => $this->fecha_limite,
+            'proyecto' => $this->nombre_proyecto,
+            'proyecto_id' => $this->proyecto_id,
+            'estado' => $this->nombre_estado,
+            'estado_id' => $this->estado_id,
+            'prioridad' => $this->nombre_prioridad,
             'prioridad_color' => $this->color_prioridad,
             'usuario_asignado_nombre' => $this->nombre_asignado,
-            'fecha_creacion'=> $this->fecha_creacion,
+            'usuario_asignado_id' => $this->usuario_asignado,
+            'fecha_creacion' => $this->fecha_creacion,
             // Si está eliminada, podemos decidir no enviarla o enviarla con flag
-            'eliminada'     => $this->estaEliminada()
+            'eliminada' => $this->estaEliminada()
         ];
     }
 }

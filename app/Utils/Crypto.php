@@ -7,23 +7,45 @@ use Exception;
 class Crypto
 {
     private static $method = 'AES-256-CBC';
+    private static $secret_key;
 
     // Obtiene la clave de encriptación desde la variable de entorno
-
     private static function getKey()
     {
-        $secret = getenv('APP_SECRET_KEY');
-        
-        if (!$secret) {
+        if (!empty(self::$secret_key)) {
+            return self::$secret_key;
+        }
+
+        // Intentar obtener de variables de entorno
+        $secret = $_ENV['APP_SECRET_KEY'] ?? $_SERVER['APP_SECRET_KEY'] ?? getenv('APP_SECRET_KEY') ?: '';
+
+        // Si no está disponible, leer directamente del archivo .env
+        if (empty($secret)) {
+            $envFile = __DIR__ . '/../../.env';
+            if (file_exists($envFile)) {
+                $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+                foreach ($lines as $line) {
+                    if (strpos(trim($line), 'APP_SECRET_KEY=') === 0) {
+                        $secret = trim(substr($line, 15));
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (empty($secret)) {
             throw new Exception('La variable APP_SECRET_KEY no está definida en el .env');
         }
-        // Retornamos el hash binario (raw) de 32 bytes
-        return hash('sha256', $secret, true);
+
+        // Cachear el hash para no tener que calcularlo múltiples veces
+        self::$secret_key = hash('sha256', $secret, true);
+        return self::$secret_key;
     }
 
     public static function encriptar($texto)
     {
-        if (empty($texto)) return null;
+        if (empty($texto))
+            return null;
 
         // 1. Generar un IV (Vector de Inicialización) aleatorio y seguro
         $ivSize = openssl_cipher_iv_length(self::$method);
@@ -36,16 +58,20 @@ class Crypto
         // Guardamos el IV para poder desencriptar después.
         return base64_encode($iv . $encrypted);
     }
-        
+
     public static function desencriptar($textoCifrado)
     {
-        if (empty($textoCifrado)) return null;
+        if (empty($textoCifrado))
+            return null;
 
         // 1. Decodificar de Base64 a binario
-        $data = base64_decode($textoCifrado);
+        $data = base64_decode($textoCifrado, true);
 
-        // 2. Calcular el tamaño del IV para saber dónde cortar
+        // Si falla la decodificación o el dato es muy corto, retornamos el texto original (asumimos que no estaba encriptado)
         $ivSize = openssl_cipher_iv_length(self::$method);
+        if ($data === false || strlen($data) < $ivSize) {
+            return $textoCifrado;
+        }
 
         // 3. Extraer el IV (la primera parte del string)
         $iv = substr($data, 0, $ivSize);
@@ -54,6 +80,9 @@ class Crypto
         $encryptedText = substr($data, $ivSize);
 
         // 5. Desencriptar
-        return openssl_decrypt($encryptedText, self::$method, self::getKey(), 0, $iv);
+        $decrypted = openssl_decrypt($encryptedText, self::$method, self::getKey(), 0, $iv);
+
+        // Si falla la desencriptación, devolvemos el original
+        return $decrypted !== false ? $decrypted : $textoCifrado;
     }
 }

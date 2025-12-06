@@ -15,7 +15,7 @@ class AuthMiddleware extends Middleware
         $rutasPublicas = [
             '/usuarios/login',
             '/usuarios/registro',
-            '/' 
+            '/'
         ];
 
         // Obtener la ruta actual
@@ -33,7 +33,7 @@ class AuthMiddleware extends Middleware
 
         if (!$authHeader) {
             ApiResponse::error("Acceso denegado. Ruta protegida.", [], 401);
-            return; 
+            return;
         }
 
         list($token) = sscanf($authHeader, 'Bearer %s');
@@ -46,7 +46,7 @@ class AuthMiddleware extends Middleware
         try {
             $decoded = Auth::verificarToken($token);
             $usuarioId = $decoded->data->id;
-            
+
             $repo = new UsuarioRepository();
             $usuario = $repo->obtenerPorId($usuarioId);
 

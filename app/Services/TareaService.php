@@ -56,7 +56,7 @@ class TareaService
         $tarea->tarea_descripcion = isset($datos['descripcion']) ? $datos['descripcion'] : '';
         $tarea->fecha_limite = isset($datos['fecha_limite']) ? $datos['fecha_limite'] : null;
         $tarea->prioridad_id = isset($datos['prioridad_id']) ? $datos['prioridad_id'] : 2;
-        $tarea->estado_id = 1;
+        $tarea->estado_id = isset($datos['estado_id']) ? $datos['estado_id'] : 1; // Usar estado del frontend o Pendiente por defecto
         $tarea->proyecto_id = $datos['proyecto_id'];
         $tarea->categoria_id = isset($datos['categoria_id']) ? $datos['categoria_id'] : null;
         $tarea->usuario_asignado = $asignadoFinal;

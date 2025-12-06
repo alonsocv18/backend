@@ -85,8 +85,8 @@ class UsuarioService
     // Lógica de administración de usuarios
     public function listarUsuariosAdmin($usuarioLogueado, $filtroRol = null)
     {
-        // Restringe el acceso solo a administradores
-        if ($usuarioLogueado->rol_id != 1) {
+        // Restringe el acceso a Administradores (1) y Project Managers (2)
+        if ($usuarioLogueado->rol_id != 1 && $usuarioLogueado->rol_id != 2) {
             throw new Exception("No tienes permisos para listar usuarios.");
         }
 

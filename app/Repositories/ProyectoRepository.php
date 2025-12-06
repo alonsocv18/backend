@@ -20,11 +20,40 @@ class ProyectoRepository
         // Se trae el nombre encriptado del creador 
         $sql = "SELECT p.*, u.usuario_nombre as nombre_creador 
                 FROM proyectos p
-                INNER JOIN usuarios u ON p.usuario_creador = u.usuario_id
+                LEFT JOIN usuarios u ON p.usuario_creador = u.usuario_id
                 WHERE p.proyecto_estado = 1 
                 ORDER BY p.fecha_creacion DESC";
 
         $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+
+        $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $proyectos = [];
+        foreach ($resultados as $fila) {
+            $proyectos[] = new Proyecto($fila);
+        }
+
+        return $proyectos;
+    }
+
+    /**
+     * Listar solo proyectos donde el usuario tiene tareas asignadas
+     * Usado para usuarios con rol 3 (Usuario Normal)
+     */
+    public function listarPorUsuario($usuarioId)
+    {
+        $sql = "SELECT DISTINCT p.*, u.usuario_nombre as nombre_creador 
+                FROM proyectos p
+                LEFT JOIN usuarios u ON p.usuario_creador = u.usuario_id
+                INNER JOIN tareas t ON t.proyecto_id = p.proyecto_id
+                WHERE p.proyecto_estado = 1 
+                AND t.usuario_asignado = :usuario_id
+                AND t.fecha_eliminacion IS NULL
+                ORDER BY p.fecha_creacion DESC";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':usuario_id', $usuarioId);
         $stmt->execute();
 
         $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);

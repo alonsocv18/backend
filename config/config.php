@@ -1,10 +1,18 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
-// Uso vlucas/phpdotenv  para cargar variables de entorno desde un archivo .env
+// Uso vlucas/phpdotenv para cargar variables de entorno desde un archivo .env
 if (file_exists(__DIR__ . '/../.env')) {
     $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
     $dotenv->load();
+
+    // Forzar que las variables también estén disponibles en getenv()
+    // phpdotenv v4 solo carga en $_ENV y $_SERVER por defecto
+    foreach ($_ENV as $key => $value) {
+        if (!getenv($key)) {
+            putenv("$key=$value");
+        }
+    }
 }
 
 use App\Config\Database;
