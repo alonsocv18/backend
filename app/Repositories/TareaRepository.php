@@ -139,4 +139,43 @@ class TareaRepository
         }
         return null;
     }
+
+    // Listar tareas sin asignar (Bolsa de Tareas)
+    public function listarSinAsignar()
+    {
+        $sql = "SELECT 
+                    t.*, 
+                    p.proyecto_nombre as nombre_proyecto,
+                    e.estado_nombre as nombre_estado,
+                    pr.prioridad_nombre as nombre_prioridad,
+                    pr.prioridad_color as color_prioridad
+                FROM tareas t
+                INNER JOIN proyectos p ON t.proyecto_id = p.proyecto_id
+                INNER JOIN tarea_estados e ON t.estado_id = e.estado_id
+                INNER JOIN tarea_prioridades pr ON t.prioridad_id = pr.prioridad_id
+                WHERE t.usuario_asignado IS NULL 
+                  AND t.fecha_eliminacion IS NULL
+                ORDER BY pr.prioridad_valor DESC, t.fecha_limite ASC";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $tareas = [];
+        foreach ($resultados as $fila) {
+            $tareas[] = new Tarea($fila);
+        }
+
+        return $tareas;
+    }
+
+    // Asignar tarea a un usuario
+    public function asignarUsuario($tareaId, $usuarioId)
+    {
+        $sql = "UPDATE tareas SET usuario_asignado = :usuario_id WHERE tarea_id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':usuario_id', $usuarioId);
+        $stmt->bindParam(':id', $tareaId);
+        return $stmt->execute();
+    }
 }

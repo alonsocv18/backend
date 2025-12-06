@@ -120,4 +120,35 @@ class TareaService
 
         return $this->tareaRepository->eliminar($id);
     }
+
+    // Lista las tareas sin asignar (Bolsa de Tareas)
+    public function listarTareasBolsa()
+    {
+        $tareas = $this->tareaRepository->listarSinAsignar();
+
+        // Las tareas de la bolsa no tienen usuario asignado
+        foreach ($tareas as $tarea) {
+            $tarea->nombre_asignado = "Sin asignar";
+        }
+
+        return $tareas;
+    }
+
+    // Permite a un usuario auto-asignarse una tarea de la bolsa
+    public function autoAsignarTarea($tareaId, $usuario)
+    {
+        // Verificar que la tarea existe
+        $tarea = $this->tareaRepository->obtenerPorId($tareaId);
+        if (!$tarea) {
+            throw new Exception("La tarea no existe.");
+        }
+
+        // Verificar que la tarea NO tiene usuario asignado
+        if (!empty($tarea->usuario_asignado)) {
+            throw new Exception("Esta tarea ya está asignada a otro usuario.");
+        }
+
+        // Asignar la tarea al usuario actual
+        return $this->tareaRepository->asignarUsuario($tareaId, $usuario->usuario_id);
+    }
 }

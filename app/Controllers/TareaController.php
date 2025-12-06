@@ -22,15 +22,14 @@ class TareaController
         try {
             $app = Slim::getInstance();
 
-            // 1. Obtenemos el usuario que el Middleware validó previamente.
-            // Esto es genial: ¡Ya sabemos su ID y su Rol sin consultar la BD de nuevo!
+            // Obtenemos el usuario que el Middleware validó previamente.
             $usuarioLogueado = $app->usuario;
 
-            // 2. Llamamos al servicio pasando al usuario entero
+            // Llamamos al servicio pasando al usuario entero
             // El servicio decidirá qué tareas mostrarle según su rol.
             $tareas = $this->tareaService->listarTareas($usuarioLogueado);
 
-            // 3. Convertimos los objetos a Array para la respuesta JSON
+            // Convertimos los objetos a Array para la respuesta JSON
             $data = array_map(function ($t) {
                 return $t->toArray();
             }, $tareas);
@@ -89,16 +88,49 @@ class TareaController
         try {
             $app = Slim::getInstance();
 
-            // 1. Obtenemos quién quiere borrar
+            // Obtenemos quién quiere borrar
             $usuarioLogueado = $app->usuario;
 
-            // 2. Llamamos al servicio PASANDO EL USUARIO
+            // Llamamos al servicio PASANDO EL USUARIO
             $this->tareaService->eliminarTarea($id, $usuarioLogueado);
 
             ApiResponse::exito("Tarea eliminada correctamente.");
 
         } catch (\Exception $e) {
             ApiResponse::alerta("No se pudo eliminar la tarea: " . $e->getMessage());
+        }
+    }
+
+    // GET /tareas/bolsa - Lista tareas sin asignar (Bolsa de Tareas)
+    public function listarBolsa()
+    {
+        try {
+            $tareas = $this->tareaService->listarTareasBolsa();
+
+            $data = array_map(function ($t) {
+                return $t->toArray();
+            }, $tareas);
+
+            ApiResponse::exito("Tareas disponibles recuperadas correctamente.", $data);
+
+        } catch (\Exception $e) {
+            ApiResponse::error("Error al listar tareas disponibles: " . $e->getMessage());
+        }
+    }
+
+    // PUT /tareas/:id/asignarme - Usuario se auto-asigna una tarea
+    public function asignarme($id)
+    {
+        try {
+            $app = Slim::getInstance();
+            $usuarioLogueado = $app->usuario;
+
+            $this->tareaService->autoAsignarTarea($id, $usuarioLogueado);
+
+            ApiResponse::exito("¡Tarea asignada correctamente! Ahora puedes verla en 'Mis Tareas'.");
+
+        } catch (\Exception $e) {
+            ApiResponse::alerta($e->getMessage());
         }
     }
 }

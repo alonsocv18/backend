@@ -26,4 +26,14 @@ $app->group('/tareas', function () use ($app) {
         (new TareaController())->eliminar($id);
     });
 
+    // GET /tareas/bolsa - Lista tareas disponibles (sin asignar)
+    $app->get('/bolsa', function () {
+        (new TareaController())->listarBolsa();
+    });
+
+    // PUT /tareas/:id/asignarme - Auto-asignarse una tarea
+    $app->put('/:id/asignarme', function ($id) {
+        (new TareaController())->asignarme($id);
+    });
+
 });
