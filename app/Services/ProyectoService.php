@@ -24,7 +24,9 @@ class ProyectoService
     {
         // Si es usuario normal (rol 3), solo ver proyectos donde tenga tareas asignadas
         if ($usuarioActual && $usuarioActual->rol_id == 3) {
-            $proyectos = $this->proyectoRepository->listarPorUsuario($usuarioActual->usuario_id);
+            $proyectos = $this->proyectoRepository->listarPorUsuario(
+                $usuarioActual->usuario_id,
+            );
         } else {
             $proyectos = $this->proyectoRepository->listar();
         }
@@ -63,13 +65,21 @@ class ProyectoService
         ProyectoValidator::validarCreacion($datos);
 
         $proyecto = new Proyecto();
-        $proyecto->proyecto_nombre = $datos['nombre'];
-        $proyecto->proyecto_descripcion = isset($datos['descripcion']) ? $datos['descripcion'] : '';
-        $proyecto->sucursal_id = $datos['sucursal_id']; // Obligatorio según requerimiento
-        $proyecto->estado_id = isset($datos['estado_id']) ? $datos['estado_id'] : 1; // Default: Planificación
+        $proyecto->proyecto_nombre = $datos["nombre"];
+        $proyecto->proyecto_descripcion = isset($datos["descripcion"])
+            ? $datos["descripcion"]
+            : "";
+        $proyecto->sucursal_id = $datos["sucursal_id"];
+        $proyecto->estado_id = isset($datos["estado_id"])
+            ? $datos["estado_id"]
+            : 1; // Default: Planificación
         $proyecto->usuario_creador = $usuarioActual->usuario_id;
-        $proyecto->fecha_inicio = isset($datos['fecha_inicio']) ? $datos['fecha_inicio'] : date('Y-m-d');
-        $proyecto->fecha_fin = isset($datos['fecha_fin']) ? $datos['fecha_fin'] : null; // Opcional
+        $proyecto->fecha_inicio = isset($datos["fecha_inicio"])
+            ? $datos["fecha_inicio"]
+            : date("Y-m-d");
+        $proyecto->fecha_fin = isset($datos["fecha_fin"])
+            ? $datos["fecha_fin"]
+            : null;
 
         return $this->proyectoRepository->crear($proyecto);
     }
@@ -90,12 +100,24 @@ class ProyectoService
             throw new Exception("El proyecto no existe.");
         }
 
-        $proyecto->proyecto_nombre = isset($datos['nombre']) ? $datos['nombre'] : $proyecto->proyecto_nombre;
-        $proyecto->proyecto_descripcion = isset($datos['descripcion']) ? $datos['descripcion'] : $proyecto->proyecto_descripcion;
-        $proyecto->sucursal_id = isset($datos['sucursal_id']) ? $datos['sucursal_id'] : $proyecto->sucursal_id;
-        $proyecto->estado_id = isset($datos['estado_id']) ? $datos['estado_id'] : $proyecto->estado_id;
-        $proyecto->fecha_inicio = isset($datos['fecha_inicio']) ? $datos['fecha_inicio'] : $proyecto->fecha_inicio;
-        $proyecto->fecha_fin = isset($datos['fecha_fin']) ? $datos['fecha_fin'] : $proyecto->fecha_fin;
+        $proyecto->proyecto_nombre = isset($datos["nombre"])
+            ? $datos["nombre"]
+            : $proyecto->proyecto_nombre;
+        $proyecto->proyecto_descripcion = isset($datos["descripcion"])
+            ? $datos["descripcion"]
+            : $proyecto->proyecto_descripcion;
+        $proyecto->sucursal_id = isset($datos["sucursal_id"])
+            ? $datos["sucursal_id"]
+            : $proyecto->sucursal_id;
+        $proyecto->estado_id = isset($datos["estado_id"])
+            ? $datos["estado_id"]
+            : $proyecto->estado_id;
+        $proyecto->fecha_inicio = isset($datos["fecha_inicio"])
+            ? $datos["fecha_inicio"]
+            : $proyecto->fecha_inicio;
+        $proyecto->fecha_fin = isset($datos["fecha_fin"])
+            ? $datos["fecha_fin"]
+            : $proyecto->fecha_fin;
 
         return $this->proyectoRepository->actualizar($proyecto);
     }

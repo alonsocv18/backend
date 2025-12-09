@@ -24,7 +24,7 @@ class DataMasterRepository
 
     public function listarPrioridades()
     {
-        $sql = "SELECT prioridad_id as id, prioridad_nombre as nombre, prioridad_color as color 
+        $sql = "SELECT prioridad_id as id, prioridad_nombre as nombre 
                 FROM tarea_prioridades ORDER BY prioridad_valor DESC";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
@@ -50,7 +50,7 @@ class DataMasterRepository
 
     public function listarEstadosProyecto()
     {
-        $sql = "SELECT estado_id as id, estado_nombre as nombre, estado_color as color 
+        $sql = "SELECT estado_id as id, estado_nombre as nombre 
                 FROM proyecto_estados ORDER BY estado_orden ASC";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();

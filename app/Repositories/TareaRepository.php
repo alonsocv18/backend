@@ -23,7 +23,6 @@ class TareaRepository
                     s.sucursal_nombre as nombre_sucursal,
                     e.estado_nombre as nombre_estado,
                     pr.prioridad_nombre as nombre_prioridad,
-                    pr.prioridad_color as color_prioridad,
                     u.usuario_nombre as nombre_asignado
                 FROM tareas t
                 INNER JOIN proyectos p ON t.proyecto_id = p.proyecto_id
@@ -149,8 +148,7 @@ class TareaRepository
                     t.*, 
                     p.proyecto_nombre as nombre_proyecto,
                     e.estado_nombre as nombre_estado,
-                    pr.prioridad_nombre as nombre_prioridad,
-                    pr.prioridad_color as color_prioridad
+                    pr.prioridad_nombre as nombre_prioridad
                 FROM tareas t
                 INNER JOIN proyectos p ON t.proyecto_id = p.proyecto_id
                 INNER JOIN tarea_estados e ON t.estado_id = e.estado_id

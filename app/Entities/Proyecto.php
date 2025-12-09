@@ -19,7 +19,6 @@ class Proyecto
     public $nombre_creador;
     public $sucursal_nombre;
     public $estado_nombre;
-    public $estado_color;
 
     public function __construct($data = [])
     {
@@ -50,7 +49,6 @@ class Proyecto
             'sucursal_nombre' => $this->sucursal_nombre,
             'estado_id' => $this->estado_id,
             'estado_nombre' => $this->estado_nombre,
-            'estado_color' => $this->estado_color,
             'creador_id' => $this->usuario_creador,
             'creador_nombre' => $this->nombre_creador,
             'fecha_inicio' => $this->fecha_inicio,

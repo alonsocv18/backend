@@ -7,6 +7,7 @@ use App\Utils\ApiResponse;
 use App\Utils\Auth;
 use App\Repositories\UsuarioRepository;
 
+// Capa de protección previa al controlador
 class AuthMiddleware extends Middleware
 {
     public function call()

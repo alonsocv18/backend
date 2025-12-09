@@ -37,6 +37,7 @@ class UsuarioController
         }
     }
 
+    // Metodo login() del frontend
     public function login()
     {
         try {
@@ -70,6 +71,7 @@ class UsuarioController
     }
 
     // MÉTODOS DE ADMINISTRADOR (Gestión)
+    // Metodo getUsers() del frontend
     public function listarTodo()
     {
         try {
@@ -93,6 +95,7 @@ class UsuarioController
         }
     }
 
+    // Metodo createUser() del frontend
     public function crearAdmin()
     {
         try {
@@ -111,6 +114,7 @@ class UsuarioController
         }
     }
 
+    // Metodo updateUser() del frontend
     public function editarAdmin($id)
     {
         try {
@@ -129,6 +133,7 @@ class UsuarioController
         }
     }
 
+    // Metodo deleteUser() del frontend
     public function eliminarAdmin($id)
     {
         try {

@@ -5,9 +5,6 @@ $app = new \Slim\Slim();
 
 $app->config('debug', true);
 
-// Agrego el middleware de autenticación de manera global
-// Entonces cada petición que llegue pasará primero por AuthMiddleware.
-// El middleware decidirá si la ruta es pública o no.
 $app->add(new \App\Middleware\AuthMiddleware());
 $app->add(new \App\Middleware\CorsMiddleware());
 

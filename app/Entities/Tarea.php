@@ -54,7 +54,6 @@ class Tarea
             'estado_id' => $this->estado_id,
             'prioridad' => $this->nombre_prioridad,
             'prioridad_id' => $this->prioridad_id,
-            'prioridad_color' => $this->color_prioridad,
             'usuario_asignado_nombre' => $this->nombre_asignado,
             'usuario_asignado_id' => $this->usuario_asignado,
             'fecha_creacion' => $this->fecha_creacion,

@@ -23,8 +23,7 @@ class ProyectoRepository
         $sql = "SELECT p.*, 
                        u.usuario_nombre as nombre_creador,
                        s.sucursal_nombre,
-                       pe.estado_nombre,
-                       pe.estado_color
+                       pe.estado_nombre
                 FROM proyectos p
                 LEFT JOIN usuarios u ON p.usuario_creador = u.usuario_id
                 LEFT JOIN sucursales s ON p.sucursal_id = s.sucursal_id
@@ -53,8 +52,7 @@ class ProyectoRepository
         $sql = "SELECT DISTINCT p.*, 
                        u.usuario_nombre as nombre_creador,
                        s.sucursal_nombre,
-                       pe.estado_nombre,
-                       pe.estado_color
+                       pe.estado_nombre
                 FROM proyectos p
                 LEFT JOIN usuarios u ON p.usuario_creador = u.usuario_id
                 LEFT JOIN sucursales s ON p.sucursal_id = s.sucursal_id
@@ -87,8 +85,7 @@ class ProyectoRepository
         $sql = "SELECT p.*, 
                        u.usuario_nombre as nombre_creador,
                        s.sucursal_nombre,
-                       pe.estado_nombre,
-                       pe.estado_color
+                       pe.estado_nombre
                 FROM proyectos p
                 LEFT JOIN usuarios u ON p.usuario_creador = u.usuario_id
                 LEFT JOIN sucursales s ON p.sucursal_id = s.sucursal_id
