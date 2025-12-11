@@ -25,7 +25,7 @@ class ProyectoService
         // Si es usuario normal (rol 3), solo ver proyectos donde tenga tareas asignadas
         if ($usuarioActual && $usuarioActual->rol_id == 3) {
             $proyectos = $this->proyectoRepository->listarPorUsuario(
-                $usuarioActual->usuario_id,
+                $usuarioActual->usuario_id
             );
         } else {
             $proyectos = $this->proyectoRepository->listar();
